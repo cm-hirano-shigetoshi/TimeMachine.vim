@@ -1,11 +1,11 @@
 base_task:
-    input: git log --oneline $(cat ~/.temp) | sed 's/ /!!!/' | awk -F '!!!' -v 'OFS=:' 'BEGIN {p1="--"; p2="(current)"} {print $1,p1,p2;p1=$1;p2=$2} END {print "--",p1,p2}'
+    input: git log --oneline $(cat ${1}) | sed 's/ /!!!/' | awk -F '!!!' -v 'OFS=:' 'BEGIN {p1="--"; p2="(current)"} {print $1,p1,p2;p1=$1;p2=$2} END {print "--",p1,p2}'
     opts:
         - delimiter=':'
         - with-nth=3..
         - reverse
         - height=9999
-    preview: git diff --color=always {1} {2} $(cat ~/.temp)
+    preview: git diff --color=always {1} {2} $(cat ${1})
 expects:
     enter:
         stdout:
@@ -13,4 +13,4 @@ expects:
             nth: 2
     ctrl-s:
         continue:
-            preview: git show {2}:$(git rev-parse --show-prefix $(cat /Users/hirano.shigetoshi/.temp) | tr -d "\n")
+            preview: git show {2}:$(git rev-parse --show-prefix $(cat ${1}) | tr -d "\n")
