@@ -8,13 +8,17 @@ let s:yaml = expand('<sfile>:p:h') . "/TimeMachine.yml"
 let s:temp = tempname()
 
 function! TimeMachine#TimeMachine()
-    let file_name = expand('%')
-    call writefile([file_name], s:temp)
-    let out = system("tput cnorm > /dev/tty; " . s:fzfer . " " . s:yaml . " " . s:temp . " 2>/dev/tty")
-    let out = "git show " . out . ":" . system("git rev-parse --show-prefix " . file_name . " | tr -d '\n'")
-    let lines = split(system(out), '\n')
+    let file_path = expand('%')
+    let out = system("tput cnorm > /dev/tty; " . s:fzfer . " " . s:yaml . " '" . file_path . "' 2>/dev/tty")
+    if out == "--"
+      let cmd = "cat '" . file_path . "'"
+    else
+      let cmd = "git show " . out . ":'" . file_path . "'"
+    endif
+    let lines = split(system(cmd), '\n')
     execute("normal ggVGd")
     call append(0, lines)
+    execute("normal gg")
     redraw!
 endfunction
 
