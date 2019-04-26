@@ -19,7 +19,7 @@ function! TimeMachine#TimeMachine()
           let cmd = "git show " . out . ":'" . filename . "'"
         endif
         let lines = split(system(cmd), '\n')
-        execute("normal ggVGd")
+        execute("normal ggVG\"_d")
         call append(0, lines)
         execute("normal gg")
     endif
