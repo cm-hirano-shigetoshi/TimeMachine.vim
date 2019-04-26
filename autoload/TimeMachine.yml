@@ -7,11 +7,11 @@ base_task:
         - with-nth=3..
         - reverse
         - height=9999
-    preview: bash ~/PublicRepository/TimeMachine.vim/autoload/preview.sh diff "$arg1" {1} {2}
+    preview: bash $(dirname $arg0)/preview.sh diff "$arg1" {1} {2}
 expects:
     enter:
         stdout:
             - nth: 2
     ctrl-s:
         continue:
-            preview: bash ~/PublicRepository/TimeMachine.vim/autoload/preview.sh show "$arg1" {2}
+            preview: bash $(dirname $arg0)/preview.sh show "$arg1" {2}
