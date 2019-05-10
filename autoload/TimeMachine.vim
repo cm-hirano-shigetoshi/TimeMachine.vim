@@ -11,6 +11,9 @@ function! TimeMachine#TimeMachine()
     let file_dir = expand('%:h')
     execute("cd " . file_dir)
     let filename = expand('%')
+    if filename[0] != "/"
+        let filename = "./" . filename
+    endif
     let out = system("tput cnorm > /dev/tty; " . s:fzfer . " " . s:yaml . " '" . filename . "' 2>/dev/tty")
     if len(out) > 0
         if out == "--"
