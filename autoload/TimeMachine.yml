@@ -1,8 +1,5 @@
 base_task:
-    input: git log --oneline "$arg1"
-             | awk 'BEGIN {p1="--"; p2="(saved)"}
-                    {print $1,p1,p2;p1=$1;p2=$2}
-                    END {print "--",p1,p2}'
+    input: git log --oneline "$arg1" | perl $(dirname ${yml})/differ.pl
     opts:
         - with-nth=3..
         - reverse
@@ -15,3 +12,4 @@ expects:
     ctrl-s:
         continue:
             preview: bash $(dirname $arg0)/preview.sh show "$arg1" {2}
+
