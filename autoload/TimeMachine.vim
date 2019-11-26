@@ -16,6 +16,7 @@ function! TimeMachine#TimeMachine()
     endif
     let out = system("tput cnorm > /dev/tty; " . s:fzfer . " " . s:yaml . " '" . filename . "' 2>/dev/tty")
     if len(out) > 0
+        let out = out[:-2]
         if out == "--"
           let cmd = "cat '" . filename . "'"
         else

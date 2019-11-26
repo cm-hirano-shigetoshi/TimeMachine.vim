@@ -5,11 +5,10 @@ base_task:
         - reverse
         - height=9999
     preview: bash {ymldir}/preview.sh diff "{arg1}" {1} {2}
-expects:
-    enter:
-        stdout:
-            - nth: 2
+    output:
+        enter:
+            - pipe: awk '{print $2}'
+switch_task:
     ctrl-s:
-        continue:
-            preview: bash {ymldir}/preview.sh show "{arg1}" {2}
+        preview: bash {ymldir}/preview.sh show "{arg1}" {2}
 
