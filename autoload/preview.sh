@@ -6,7 +6,7 @@ if [[ "${MODE}" = "diff" ]]; then
   readonly FILE=$2
   readonly BEFORE=$3
   readonly AFTER=$4
-  if [[ "${BEFORE}" = "--" ]]; then
+  if [[ "${BEFORE}" = "*******" ]]; then
     git show ${AFTER}:"${FILE}"
   else
     git diff --color=always ${BEFORE} ${AFTER} "${FILE}"
@@ -14,7 +14,7 @@ if [[ "${MODE}" = "diff" ]]; then
 elif [[ "${MODE}" = "show" ]]; then
   readonly FILE=$2
   readonly HASH=$3
-  if [[ "${HASH}" = "--" ]]; then
+  if [[ "${HASH}" = "*******" ]]; then
     cat "${FILE}"
   else
     git show ${HASH}:"${FILE}"
