@@ -3,7 +3,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:fzfyml = "fzfyml run"
+let s:fzfyml = "fzfyml3 run"
 let s:yaml = expand('<sfile>:p:h') . "/TimeMachine.yml"
 
 function! TimeMachine#TimeMachine()

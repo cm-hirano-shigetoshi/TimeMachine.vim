@@ -1,4 +1,4 @@
-my $pre_hash = "--";
+my $pre_hash = "*******";
 my $pre_comment = "(saved)";
 while (<>) {
     s/[\r\n]//g;
@@ -8,3 +8,4 @@ while (<>) {
         $pre_comment = $2;
     }
 }
+print "******* $pre_hash $pre_comment\n";

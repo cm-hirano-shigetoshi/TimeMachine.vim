@@ -1,14 +1,14 @@
 base_task:
-    input: git log --oneline "{arg1}" | perl {ymldir}/differ.pl
-    opts:
+    source: git log --oneline "{{arg1}}" | perl {{yml_dir}}/differ.pl
+    options:
         - with-nth=3..
         - reverse
         - height=9999
-    preview: bash {ymldir}/preview.sh diff "{arg1}" {1} {2}
-    output:
+        - preview='bash {{yml_dir}}/preview.sh diff "{{arg1}}" {1} {2}'
+    post_operations:
         enter:
             - pipe: awk '{print $2}'
-switch_task:
-    ctrl-s:
-        preview: bash {ymldir}/preview.sh show "{arg1}" {2}
-
+task_switch:
+    alt-s:
+        options:
+            - preview='bash {{yml_dir}}/preview.sh show "{{arg1}}" {2}'
