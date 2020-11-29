@@ -2,6 +2,7 @@ base_task:
     source: git log --oneline "{{arg1}}" | perl {{yml_dir}}/differ.pl
     options:
         - with-nth=3..
+        - no-sort
         - reverse
         - height=9999
         - preview='bash {{yml_dir}}/preview.sh diff "{{arg1}}" {1} {2}'
@@ -10,5 +11,14 @@ base_task:
             - pipe: awk '{print $2}'
 task_switch:
     alt-s:
+        source: git log --abbrev=40 --oneline {{arg1}} | python {{yml_dir}}/show_content.py {{arg1}}
         options:
-            - preview='bash {{yml_dir}}/preview.sh show "{{arg1}}" {2}'
+            - delimiter=':'
+            - with-nth=2..
+            - nth=2..
+            - preview='git show {1}:{{arg1}} | grep -i -F -C 3 --color=always -- {q}'
+            - no-hscroll
+        post_operations:
+            enter:
+                - pipe: grep -o '^\w\+'
+
