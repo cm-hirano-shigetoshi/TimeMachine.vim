@@ -18,6 +18,15 @@ local function split(inputstr, sep)
     return t
 end
 
+local function contains(array, element)
+    for _, e in ipairs(array) do
+        if e == element then
+            return true
+        end
+    end
+    return false
+end 
+
 local function get_buf_name()
     local fullpath = vim.api.nvim_buf_get_name(0)
     if string.len(fullpath) > 0 then
@@ -55,18 +64,34 @@ local function dump_histories(dirname)
     end
 end
 
+local function get_positions_to_open(dirname, results)
+    local positions = {}
+    local known_files = {}
+    for _, result in ipairs(results) do
+        local sp = split(result, ":")
+        local filepath = dirname .. "/" .. sp[1]
+        if not contains(known_files, filepath) then
+            table.insert(known_files, filepath)
+            table.insert(positions, { filepath, tonumber(sp[2]) })
+        end
+    end
+    return positions
+end
+
 local function execute_fzf(dirname_, query_)
     coroutine.wrap(function(dirname, query)
-        local result = fzf.fzf("(cd " .. dirname .. " && rg --color always -L -n ^)",
-            "--ansi --reverse --delimiter ':' --query '" .. query .. "' " ..
+        local results = fzf.fzf("(cd " .. dirname .. " && rg --color always -L -n ^)",
+            "--multi --ansi --reverse --delimiter ':' --query '" .. query .. "' " ..
             "--preview '(cd " .. dirname .. " && bat --plain --number --color always --highlight-line {2} {1})' " ..
             "--preview-window 'right:60%' --preview-window '+{2}+1/2'")
-        if result then
-            local sp = split(result[1], ":")
-            vim.api.nvim_set_current_buf(tonumber(sp[1]))
-            vim.api.nvim_win_set_cursor(0, { tonumber(sp[3]), 0 })
+        if results then
+            local positions_to_open = get_positions_to_open(dirname, results)
+            for _, position in ipairs(positions_to_open) do
+                vim.api.nvim_command("next " .. position[1])
+                vim.api.nvim_win_set_cursor(0, { position[2], 0 })
+            end
         end
-        os.execute("rm -fr " .. dirname)
+        --os.execute("rm -fr " .. dirname)
     end)(dirname_, query_)
 end
 
