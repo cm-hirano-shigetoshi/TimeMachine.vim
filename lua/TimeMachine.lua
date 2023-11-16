@@ -25,7 +25,7 @@ local function contains(array, element)
         end
     end
     return false
-end 
+end
 
 local function get_buf_name()
     local fullpath = vim.api.nvim_buf_get_name(0)
@@ -41,12 +41,8 @@ local function get_hash_ids()
     return split(vim.fn.system(cmd), "\n")
 end
 
-local function get_extension(filepath)
-    return filepath:gsub("^.+%.([%w]+)$", "%1") or ""
-end
-
 local function get_output_path(dirname, hash_id)
-    return dirname .. "/" .. hash_id .. "." .. get_extension(get_buf_name())
+    return dirname .. "/" .. hash_id
 end
 
 local function save_snapshot(hash_id, output_path)
